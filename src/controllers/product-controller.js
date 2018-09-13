@@ -1,5 +1,14 @@
+const mongoose = require('mongoose');
+const Products = mongoose.model('Products');
+
 exports.post = (req, res, next) => {
-    res.status(201).send(req.body);
+    var products = new Products(req.body);
+    products.save().then(x => {
+        res.status(201).send({ message: 'Produto cadastrado com sucesso!' });
+    }).catch(e => {
+        res.status(400).send({ message: 'Falha ao cadastrar o produto!', data: e });
+    });
+
 };
 
 exports.put = (req, res, next) => {
