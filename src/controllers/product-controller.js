@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 const Products = mongoose.model('Products');
+const ValidationContract = require('../validators/fluent.validator');
+const repository = require('../repositores/product-repositorey');
 
 //requisção de todos os produtos
 exports.get = (req, res, next) => {
-    Products.find({ active: true }, 'title price slug').then(data => {
+    repository.get().then(data => {
         res.status(200).send(data);
     }).catch(e => {
         res.status(400).send(e);
@@ -13,21 +15,17 @@ exports.get = (req, res, next) => {
 
 //requisição por slug
 exports.getBySlug = (req, res, next) => {
-    Products.findOne({
-        slug: req.params.slug,
-        active: true
-    }, 'title description price slug tags')
-        .then(data => {
-            res.status(200).send(data);
-        }).catch(e => {
-            res.status(400).send(e);
-        });
+    repository.getBySlug(req.params.slug).then(data => {
+        res.status(200).send(data);
+    }).catch(e => {
+        res.status(400).send(e);
+    });
 
 };
 
 //requisição por ID
 exports.getByID = (req, res, next) => {
-    Products.findById(req.params.id)
+    repository.getById(req.params.id)
         .then(data => {
             res.status(200).send(data);
         }).catch(e => {
@@ -38,20 +36,28 @@ exports.getByID = (req, res, next) => {
 
 //requisição por tags
 exports.getByTag = (req, res, next) => {
-    Products.find({
-        tags: req.params.tag,
-        active: true
-    }, ' title description price slug tags')
+   repository.getByTag(req.params.tag)
         .then(data => {
             res.status(200).send(data);
         }).catch(e => {
             res.status(400).send(e);
         });
 };
+
 //cadastro de produto
 exports.post = (req, res, next) => {
-    var products = new Products(req.body);
-    products.save().then(x => {
+    //APLICANDO VALIDAÇÃO DO FLUENT-VALIDATOR
+    // let contract = new ValidationContract();
+    // contract.hasMinLen(req.body.title, 3, 'O Título deve conter pelo menos 3 caracteres');
+    // contract.hasMinLen(req.body.slug, 3, 'O Slug deve conter pelo menos 3 caracteres');
+    // contract.hasMinLen(req.body.description, 3, 'A Descrição deve conter pelo menos 3 caracteres');
+
+    // if (!contract.isValid()) {
+    //     res.status(400).send(contract.errors()).end();
+    //     return;
+    // }
+    repository.create(req.body)
+    .then(x => {
         res.status(201).send({ message: 'Produto cadastrado com sucesso!' });
     }).catch(e => {
         res.status(400).send({ message: 'Falha ao cadastrar o produto!', data: e });
@@ -60,14 +66,7 @@ exports.post = (req, res, next) => {
 };
 
 exports.put = (req, res, next) => {
-    Products.findByIdAndUpdate(req.params.id, {
-        $set: {
-            title: req.body.title,
-            description: req.body.description,
-            price: req.body.price,
-            slug: req.body.slug
-        }
-    })
+   repository.update(req.params.id, req.body)
         .then(x => {
             res.status(200).send({
                 message: 'Produto Atualizado com Sucesso'
@@ -81,7 +80,7 @@ exports.put = (req, res, next) => {
 };
 
 exports.delete = (req, res, next) => {
-    Products.findOneAndRemove(req.body.id)
+   repository.delete(req.body.id)
         .then(x => {
             res.status(200).send({
                 message: 'Produto Removido com Sucesso'
