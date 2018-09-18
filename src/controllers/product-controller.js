@@ -63,8 +63,8 @@ exports.post = async (req, res, next) => {
 
     // if (!contract.isValid()) {
     //     res.status(400).send(contract.errors()).end();
-    //     return;
-    // }
+    //    return;
+    //  }
     try {
         await repository.create(req.body)
         res.status(201).send({ message: 'Produto cadastrado com sucesso!' });
