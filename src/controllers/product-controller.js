@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
-const Products = mongoose.model('Products');
 const ValidationContract = require('../validators/fluent.validator');
-const repository = require('../repositores/product-repositorey');
+const repository = require('../repositores/product-repository');
 
 //requisção de todos os produtos
 exports.get = async (req, res, next) => {
