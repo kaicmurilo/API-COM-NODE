@@ -1,12 +1,13 @@
 const express = require('express');//IMPORTANDO EXPRESS
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const config = require('./config');
 
 const app = express();
 const router = express.Router();
 
 //Conecta ao banco
-mongoose.connect('mongodb://kaic:kaic123456@ds028559.mlab.com:28559/kaicolas');
+mongoose.connect(config.connectionString);
 
 //Carrega os Models
 const Products = require('./models/products');
