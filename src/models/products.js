@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    title:{
+    title: {
         type: String,
         requerid: true,
         trim: true
     },
-    slug:{
+    slug: {
         type: String,
-        requerid: [true,'O Slug é Obrigadotiro!'], 
+        requerid: [true, 'O Slug é Obrigadotiro!'],
         trim: true,
         index: true,
         unique: true
@@ -18,16 +18,16 @@ const schema = new Schema({
         type: String,
         requerid: true
     },
-    price:{
+    price: {
         type: Number,
         required: true
     },
-    active:{
+    active: {
         type: Boolean,
         requerid: true,
         default: true
     },
-    tags:[{
+    tags: [{
         type: String,
         requerid: true
     }]
