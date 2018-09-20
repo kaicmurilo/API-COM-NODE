@@ -1,19 +1,27 @@
+'use strict';
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const schema = new Schema({
-    name:{
+    name: {
         type: String,
-        requerid: true
+        required: true
     },
-    email:{
+    email: {
         type: String,
-        requerid: true
+        required: true
     },
-    password:{
+    password: {
         type: String,
-        requerid: true
-    }
+        required: true
+    },
+    roles: [{
+        type: String,
+        required: true,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }]
 });
 
 module.exports = mongoose.model('Customer', schema);

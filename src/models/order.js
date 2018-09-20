@@ -1,3 +1,5 @@
+'use strict';
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -8,34 +10,34 @@ const schema = new Schema({
     },
     number: {
         type: String,
-        requerid: true
+        required: true
     },
-    creatDate: {
+    createDate: {
         type: Date,
-        requerid: true,
+        required: true,
         default: Date.now
     },
     status: {
         type: String,
-        requerid: true,
+        required: true,
         enum: ['created', 'done'],
         default: 'created'
     },
     items: [{
         quantity: {
             type: Number,
-            requerid: true,
+            required: true,
             default: 1
         },
         price: {
             type: Number,
-            requerid: true
+            required: true
         },
         product: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Products'
-        },
-    }]
+            ref: 'Product'
+        }
+    }],
 });
 
 module.exports = mongoose.model('Order', schema);
